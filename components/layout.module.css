@@ -1,0 +1,24 @@
+.container {
+    padding: 0 1rem;
+    margin: 3rem auto 6rem;
+}
+
+.header {
+    text-align: center;
+}
+
+.footer {
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 11px;
+    margin: 3rem auto 6rem;
+    text-align: center;
+}
+
+.back-to-home {
+}
+
+.content {
+    padding: 2rem 0;
+    text-align: center;
+}
