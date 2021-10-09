@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from './layout.module.css'
-
-export const siteTitle = 'MPG League Ranking'
+import { getLocale } from '../locales/i18n-helper'
 
 // TODO : we use a simple favicon (generated)
 export default function Layout ({ children, home })
@@ -12,19 +11,18 @@ export default function Layout ({ children, home })
             <Head>
                 <link rel="icon" href="/favicon.ico"/>
                 <title>League Ranking</title>
-                <meta name="description" content="League ranking for MPG player"/>
-                <meta name="og:title" content={ siteTitle }/>
-                <meta name="" content=""/>
+                <meta name="description" content={ getLocale().description }/>
+                <meta name="og:title" content={ getLocale().siteTitle }/>
             </Head>
             <header className={ styles.header }>
-                <h1>MPG League Ranking</h1>
+                <h1>{ getLocale().mainTitle }</h1>
             </header>
             <main className={ styles.content }>{ children }</main>
             {
                 !home && (
                     <div className={ styles.backToHome }>
                         <Link href="/">
-                            <a>← Back to home</a>
+                            <a>{ getLocale().backToHome }</a>
                         </Link>
                     </div>
                 )

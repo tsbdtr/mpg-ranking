@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Layout from '../../components/layout'
 import { getLeagueIds, getRanking } from '../../lib/mpg'
 import { DataGrid } from '@mui/x-data-grid'
+import { getLocale } from '/locales/i18n-helper'
 
 export async function getStaticProps ({ params })
 {
@@ -11,27 +12,29 @@ export async function getStaticProps ({ params })
     return {
         props: {
             leagueId,
-            rankingData
+            rankingData,
         }
     }
 }
 
-export async function getStaticPaths ()
+export async function getStaticPaths ({ locales })
 {
-    const paths = getLeagueIds()
+    const paths = getLeagueIds(locales)
     return {
         paths,
-        fallback: false
+        fallback: true
     }
 }
 
 export default function LeagueRanking ({ leagueId, rankingData })
 {
+
+
     // TODO: parse rankingData to extract column : is that possible ?
     const columns = [
         {
             field: 'rank',
-            headerName: 'Rank',
+            headerName: getLocale().rankingRank,
             flex: 0.4,
             type: 'number',
             headerAlign: 'center',
@@ -39,7 +42,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
         },
         {
             field: 'team',
-            headerName: 'Team',
+            headerName: getLocale().rankingTeam,
             flex: 1.2,
             resizable: true,
             headerAlign: 'center',
@@ -47,7 +50,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
         },
         {
             field: 'points',
-            headerName: 'Point',
+            headerName: getLocale().rankingPoint,
             flex: 0.7,
             editable: false,
             resizable: true,
@@ -57,7 +60,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
         },
         {
             field: 'win',
-            headerName: 'Win',
+            headerName: getLocale().rankingWin,
             flex: 0.4,
             editable: false,
             resizable: true,
@@ -67,7 +70,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
         },
         {
             field: 'loss',
-            headerName: 'Loss',
+            headerName: getLocale().rankingLoss,
             flex: 0.4,
             editable: false,
             resizable: true,
@@ -77,7 +80,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
         },
         {
             field: 'draw',
-            headerName: 'Draw',
+            headerName: getLocale().rankingDraw,
             flex: 0.4,
             editable: false,
             resizable: true,
@@ -87,7 +90,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
         },
         {
             field: 'goalAverage',
-            headerName: 'Goal average',
+            headerName: getLocale().rankingGoalAverage,
             flex: 0.6,
             resizable: true,
             type: 'number',
@@ -101,7 +104,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
     return (
         <Layout>
             <Head>
-                <title>League ranking - { leagueId }</title>
+                <title>{ getLocale().rankingLeagueTitle } - { leagueId }</title>
             </Head>
             <div style={ { height: 1000, width: '100%' } }>
                 <DataGrid

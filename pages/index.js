@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Layout from '../components/layout'
+import { getLocale } from '../locales/i18n-helper'
 
 function HomePage ()
 {
@@ -7,7 +8,7 @@ function HomePage ()
     return (
         <Layout home>
             <Link href="/rankings/NLE1F2FK">
-                <a>Ranking for 'NLE1F2FK'</a>
+                <a>{ getLocale().goToRanking } 'NLE1F2FK'</a>
             </Link>
         </Layout>
     )
