@@ -1,36 +1,50 @@
 import Head from 'next/head'
 import Layout from '../../components/layout'
-import { getLeagueIds, getRanking } from '../../lib/mpg'
+import { getLeagueIds, getLeagueRanking } from '../../lib/mpg'
 import { DataGrid } from '@mui/x-data-grid'
 import { getLocale } from '/locales/i18n-helper'
 
 export async function getStaticProps ({ params })
 {
-    const leagueId = params.league_id
-    const rankingData = await getRanking(leagueId)
+    const leagueId = params.leagueId
+    const rankingData = await getLeagueRanking(leagueId)
+
+    // an id field is required for DataGrid so we just use the same value as _id
+    rankingData.forEach(val => val.id = val._id)
 
     return {
         props: {
             leagueId,
             rankingData,
-        }
+        },
+        revalidate: 20
     }
 }
 
 export async function getStaticPaths ({ locales })
 {
-    const paths = getLeagueIds(locales)
+    const leagueIds = await getLeagueIds()
+
+    let paths = []
+    leagueIds.forEach(id => {
+        locales.forEach(loc => {
+            paths.push({
+                params: {
+                    leagueId: id
+                },
+                locale: loc,
+            })
+        })
+    })
+
     return {
-        paths,
-        fallback: true
+        paths: paths,
+        fallback: 'blocking',
     }
 }
 
 export default function LeagueRanking ({ leagueId, rankingData })
 {
-
-
-    // TODO: parse rankingData to extract column : is that possible ?
     const columns = [
         {
             field: 'rank',
@@ -41,7 +55,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
             align: 'left'
         },
         {
-            field: 'team',
+            field: 'teamName',
             headerName: getLocale().rankingTeam,
             flex: 1.2,
             resizable: true,
@@ -49,7 +63,7 @@ export default function LeagueRanking ({ leagueId, rankingData })
             align: 'left'
         },
         {
-            field: 'points',
+            field: 'point',
             headerName: getLocale().rankingPoint,
             flex: 0.7,
             editable: false,
